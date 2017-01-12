@@ -1,0 +1,21 @@
+import pandas as pd
+import os.path
+
+input_file1 = "/home/ducviet/Rproject/wide/ses/20100413"
+input_file=os.path.join(input_file1,'ses_201004130000.txt.gz')
+
+data = pd.read_csv(input_file, sep='\t', header=None,
+                names=['stime', 'ipdst', 'nump', 'ssize'],
+                dtype={'stime': float, 'ipdst': str, 'nump': float, 'ssize': float},
+                compression='gzip')
+data1 = data[data.stime <300.0]
+data2 = data[data.stime<600.0]
+data2 = data2[data2>=300]
+data3 = data[data.stime >=600.0]
+name = "ses_201004130000.txt.gz"
+print(name[0:14])
+data1.to_csv("ses_split/"+name, header=None, sep='\t', compression='gzip')
+data2.to_csv("ses_split/"+name[0:14] + str(int(name[14:16])+05).zfill(2)+".txt.gz",
+                                                 header=None, sep='\t', compression='gzip')
+data3.to_csv("ses_split/"+name[0:14] + str(int(name[14:16])+10).zfill(2)+".txt.gz",
+                                                 header=None, sep='\t', compression='gzip')
